@@ -1,0 +1,20 @@
+Step 4
+
+User story:
+In order to use public transport
+As a customer
+I want money on my card
+
+To complete this challenge:
+ Write up a plan for how you will interact with your code and manually test in IRB.
+ 
+ Create an Oyster card instance, witha balance of £X
+ card = Card.new
+ card.balance = some quantity
+
+ Step 5 
+ Write up a plan for how you will interact with your code and manually test in IRB.
+
+ Create an Oyster card instance
+ Use the top up function
+ verify the top up method has added money to the balance
