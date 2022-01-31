@@ -13,6 +13,11 @@ class Oystercard
     @balance
   end
 
+  def deduct(amount)
+    @balance -= amount
+    @balance
+  end
+
   private
 
   def over_limit?(balance,amount)

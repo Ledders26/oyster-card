@@ -33,3 +33,19 @@ Plan:
 Create an Oyster card instance
 Us the top up function to go over the limit of £90 (ie card.top_up(100))
 Check this throws an error
+
+Step 7
+
+User Story
+In order to pay for my journey
+As a customer
+I need my fare deducted from my card
+
+To complete this challenge:
+ Write up a plan for how you will interact with your code and manually test in IRB
+
+ Plan:
+Create an Oyster Card instance
+Add some balance
+Deduct some balance
+Confirm deduction has been removed from the balace
