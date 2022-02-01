@@ -61,3 +61,13 @@ Plan
 Create Oyster Card instance
 Customer touch in
 Customer touch out
+
+User Story
+In order to pay for my journey
+As a customer
+I need to have the minimum amount for a single journey
+
+Plan
+Create Oyster Card instance
+touch in
+true if balance greater than single fair else raise error

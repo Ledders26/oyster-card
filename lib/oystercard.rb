@@ -1,26 +1,30 @@
-class Oystercard
+# frozen_string_literal: true
 
+# Create instances of Oyster Card
+class Oystercard
+  CARD_LIMIT = 90
+  MINIMUM_FARE = 1
   attr_reader :balance
   attr_accessor :in_journey
 
   def initialize
     @balance = 0
-    @limit = 90
     @in_journey = false
   end
 
   def top_up(amount)
-    raise "this has exceeded the top up limit value of #{@limit}" if over_limit?(@balance, amount)
+    raise "this has exceeded the top up limit value of #{CARD_LIMIT}" if over_limit?(@balance, amount)
+
     @balance += amount
-    @balance
   end
 
   def deduct(amount)
     @balance -= amount
-    @balance
   end
 
   def touch_in
+    raise 'Insufficient balance' if @balance < MINIMUM_FARE
+
     @in_journey = true
   end
 
@@ -34,7 +38,7 @@ class Oystercard
 
   private
 
-  def over_limit?(balance,amount)
-    @balance + amount > @limit
+  def over_limit?(_balance, amount)
+    @balance + amount > CARD_LIMIT
   end
 end
