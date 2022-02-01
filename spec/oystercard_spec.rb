@@ -3,6 +3,7 @@
 require_relative '../lib/oystercard'
 
 describe Oystercard do
+  let(:station) { double (:station) }
   # tests if an oyster card responds to balance
   describe '#balance' do
     it 'should respond to balance' do
@@ -25,11 +26,23 @@ describe Oystercard do
 
   # Testing the touch in method
   describe '#touch_in' do
-    it { is_expected.to respond_to(:touch_in) }
+    it { is_expected.to respond_to(:touch_in).with(1).arguments }
 
     it 'should not allow check in if balance lower than minimum single fair' do
       allow(subject).to receive(:balance) { Oystercard::MINIMUM_FARE - 0.5 }
-      expect { subject.touch_in }.to raise_error('Insufficient balance')
+      expect { subject.touch_in(station) }.to raise_error('Insufficient balance')
+    end
+
+    it "should know we're in a journey when we touch in" do
+      subject.top_up(30)
+      expect { subject.touch_in(station) }.to change { subject.in_journey? }.to(true)
+    end
+
+    it "should remember the entry station following a touch in" do
+      subject.top_up(30)
+      # allow(subject).to receive(:entry_station).and_return("Picadilly")
+      # subject_double = double('subject', :entry_station => "Picadilly")
+      expect { subject.touch_in("Picadilly") }.to change {subject.entry_station}.from(nil).to("Picadilly")
     end
   end
 
@@ -37,9 +50,15 @@ describe Oystercard do
   describe '#touch_out' do
     it { is_expected.to respond_to(:touch_out) }
 
+    it "should know we're no longer in a journey when we touch out" do
+      subject.top_up(30)
+      subject.touch_in(station)
+      expect { subject.touch_out }.to change { subject.in_journey? }.to(false)
+    end
+
     it "should deduct minimum fare from balance" do
       subject.top_up(Oystercard::CARD_LIMIT)
-      subject.touch_in
+      subject.touch_in(station)
       expect { subject.touch_out }.to change { subject.balance }.by(-(Oystercard::MINIMUM_FARE))
     end
   end
@@ -48,4 +67,5 @@ describe Oystercard do
   describe '#in_journey?' do
     it { is_expected.to_not be_in_journey }
   end
+
 end
