@@ -4,6 +4,7 @@ require_relative '../lib/oystercard'
 
 describe Oystercard do
   let(:station) { double (:station) }
+  let(:journey){ {:entry_station=>station, :exit_station=>station} }
   # tests if an oyster card responds to balance
   describe '#balance' do
     it 'should respond to balance' do
@@ -48,21 +49,33 @@ describe Oystercard do
 
   # Testing the touch out method
   describe '#touch_out' do
-    it { is_expected.to respond_to(:touch_out) }
+    it { is_expected.to respond_to(:touch_out).with(1).arguments }
 
     it "should know we're no longer in a journey when we touch out" do
       subject.top_up(30)
       subject.touch_in(station)
-      expect { subject.touch_out }.to change { subject.in_journey? }.to(false)
+      expect { subject.touch_out(station) }.to change { subject.in_journey? }.to(false)
     end
 
     it "should deduct minimum fare from balance" do
       subject.top_up(Oystercard::CARD_LIMIT)
       subject.touch_in(station)
-      expect { subject.touch_out }.to change { subject.balance }.by(-(Oystercard::MINIMUM_FARE))
+      expect { subject.touch_out(station) }.to change { subject.balance }.by(-(Oystercard::MINIMUM_FARE))
+    end
+
+    it "should create a journey when touching in and out" do
+      subject.top_up(Oystercard::CARD_LIMIT)
+      subject.touch_in(station)
+      subject.touch_out(station)
+      expect(subject.journeys).to include journey
     end
   end
 
+  describe '#journeys' do
+    it "should return an empty hash by default" do
+      expect(subject.journeys).to be_empty
+    end
+  end
   # Testing the in_journey? method - as it starts as false, testing for false response
   describe '#in_journey?' do
     it { is_expected.to_not be_in_journey }
