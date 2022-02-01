@@ -23,14 +23,6 @@ describe Oystercard do
     end
   end
 
-  # Testing the deduct method
-  describe '#deduct' do
-    it 'should deduct money from balance of the card' do
-      subject.top_up(50)
-      expect { subject.deduct(20) }.to change { subject.balance }.by(-20)
-    end
-  end
-
   # Testing the touch in method
   describe '#touch_in' do
     it { is_expected.to respond_to(:touch_in) }
@@ -44,6 +36,12 @@ describe Oystercard do
   # Testing the touch out method
   describe '#touch_out' do
     it { is_expected.to respond_to(:touch_out) }
+
+    it "should deduct minimum fare from balance" do
+      subject.top_up(Oystercard::CARD_LIMIT)
+      subject.touch_in
+      expect { subject.touch_out }.to change { subject.balance }.by(-(Oystercard::MINIMUM_FARE))
+    end
   end
 
   # Testing the in_journey? method - as it starts as false, testing for false response

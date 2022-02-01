@@ -13,22 +13,17 @@ class Oystercard
   end
 
   def top_up(amount)
-    raise "this has exceeded the top up limit value of #{CARD_LIMIT}" if over_limit?(@balance, amount)
-
+    raise "this has exceeded the top up limit value of #{CARD_LIMIT}" if over_limit?(amount)
     @balance += amount
-  end
-
-  def deduct(amount)
-    @balance -= amount
   end
 
   def touch_in
     raise 'Insufficient balance' if @balance < MINIMUM_FARE
-
     @in_journey = true
   end
 
   def touch_out
+    deduct(MINIMUM_FARE)
     @in_journey = false
   end
 
@@ -38,7 +33,11 @@ class Oystercard
 
   private
 
-  def over_limit?(_balance, amount)
+  def over_limit?(amount)
     @balance + amount > CARD_LIMIT
+  end
+
+  def deduct(amount)
+    @balance -= amount
   end
 end
