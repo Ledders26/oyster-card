@@ -49,3 +49,15 @@ Create an Oyster Card instance
 Add some balance
 Deduct some balance
 Confirm deduction has been removed from the balace
+
+Step 8
+
+User Story
+In order to get through the barriers.
+As a customer
+I need to touch in and out.
+
+Plan
+Create Oyster Card instance
+Customer touch in
+Customer touch out

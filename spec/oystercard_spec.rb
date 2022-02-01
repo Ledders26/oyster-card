@@ -27,4 +27,20 @@ describe Oystercard do
       expect { subject.deduct(20) }.to change { subject.balance }.by(-20)
     end
   end
+
+  # Testing the touch in method
+  describe "#touch_in" do
+    it { is_expected.to respond_to(:touch_in) }
+  end
+
+  # Testing the touch out method
+  describe "#touch_out" do
+    it { is_expected.to respond_to(:touch_out) }
+  end
+
+  # Testing the in_journey? method - as it starts as false, testing for false response
+  describe "#in_journey?" do
+    it { is_expected.to_not be_in_journey }
+  end
+
 end
